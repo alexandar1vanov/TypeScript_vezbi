@@ -2,15 +2,15 @@
   "name": "typescript_vezbi",
   "version": "1.0.0",
   "description": "",
-  "main": "calculator.js",
+  "main": "vezbi.js",
   "scripts": {
-    "dev": "tsc --watch & lite-server"
+    "dev": "start tsc --watch & lite-server"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "lite-server": "^2.6.1",
-    "typescript": "^5.4.2"
+    "typescript": "^5.8.2"
   }
 }
 
