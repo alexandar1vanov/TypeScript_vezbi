@@ -29,9 +29,30 @@ h1 {
     z-index: 3;
     background-color: greenyellow;
 }
-#glaven{
-    border: 3px solid black;
-    z-index: 4;
+h4{
+    color: #b91b1b;
+    font-size: 46px;
+}
+
+#hearts{
+    position: absolute;
+    top: -30px;
+    left: 30px;
+}
+#poen4iki{
+    position: absolute;
+    top: -30px;
+    right: 30px;
+}
+
+#player {
+    width: 150px;
+    height: 20px;
+    background-color: blueviolet;
+    position: absolute;
+    bottom: 25px;  
+    left: 50%;  
+    transform: translateX(-50%); 
 }
 
 #PlayGameButton {
