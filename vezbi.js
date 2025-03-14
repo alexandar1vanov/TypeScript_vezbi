@@ -6,6 +6,7 @@ var shirina = gameContainer ? gameContainer.clientWidth : 1150;
 var visina = gameContainer ? gameContainer.clientHeight : 750;
 var igrac = {
     points: 0,
+    lifes: 3,
     speed: 5,
     positionX: 50,
 };
@@ -51,24 +52,49 @@ function spawnObjects() {
     nizaKvadrati.push(kvadrat4e);
     gameContainer === null || gameContainer === void 0 ? void 0 : gameContainer.appendChild(div);
 }
+function updateStats() {
+    var zivoti = document.getElementById("lifes");
+    var scoreBoard = document.getElementById("score");
+    if (zivoti && scoreBoard) {
+        zivoti.innerHTML = "".concat(igrac.lifes);
+        scoreBoard.innerHTML = "".concat(igrac.points);
+    }
+}
 function startMoving() {
     var gameContainer = document.getElementById("game-container");
     var visina = gameContainer ? gameContainer.clientHeight : 750;
-    nizaKvadrati.forEach(function (element) {
-        var kvadratElement = document.getElementById("kvadrat-".concat(element.id));
-        if (kvadratElement) {
-            element.positionY -= element.speed;
-            kvadratElement.style.bottom = "".concat(element.positionY, "px");
-            if (element.positionY <= visina) {
-                kvadratElement.style.opacity = "1";
+    if (player) {
+        var playerRect_1 = player.getBoundingClientRect();
+        nizaKvadrati.forEach(function (element) {
+            var kvadratElement = document.getElementById("kvadrat-".concat(element.id));
+            if (kvadratElement && player) {
+                element.positionY -= element.speed;
+                kvadratElement.style.bottom = "".concat(element.positionY, "px");
+                if (element.positionY <= visina) {
+                    kvadratElement.style.opacity = "1";
+                }
+                var kvadratRect = kvadratElement.getBoundingClientRect();
+                if (kvadratRect.bottom >= playerRect_1.top &&
+                    kvadratRect.left < playerRect_1.right &&
+                    kvadratRect.right > playerRect_1.left) {
+                    igrac.points += element.points;
+                    kvadratElement.remove();
+                }
+                if (element.positionY <= 10) {
+                    kvadratElement.remove();
+                    igrac.lifes -= 1;
+                }
             }
-            if (element.positionY <= 0) {
-                kvadratElement.style.display = "none";
-            }
-        }
-    });
+            updateStats();
+        });
+    }
     requestAnimationFrame(startMoving);
 }
+// TO DO: 
+// 1) napravi po smooth transition na dvizenjeto na igrachot so velocityMatter???,
+// 2) otkako dojdde do levata strana, da ima moznost da se spawne
+// za polesno da stignuva
+// 3)
 function startGame() {
     var kopce = document.getElementById("PlayGameButton");
     if (kopce != null) {
