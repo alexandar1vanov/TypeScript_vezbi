@@ -26,6 +26,7 @@ const igrac: Igrac = {
   speed: 5,
   positionX: 50,
 }
+
 function movePlayer() {
   if (player) {
     player.style.left = `${igrac.positionX}%`
@@ -45,6 +46,7 @@ document.addEventListener("keydown", (event) => {
   }
   movePlayer();
 });
+
 
 function spawnObjects() {
   count++;
@@ -82,6 +84,9 @@ function updateStats() {
   }
 }
 function startMoving() {
+  if(isGameOver){
+    return;
+  }
   const gameContainer = document.getElementById("game-container");
   const visina = gameContainer ? gameContainer.clientHeight : 750;
   if (player) {
@@ -106,6 +111,9 @@ function startMoving() {
         if (element.positionY <= 10) {
           kvadratElement.remove();
           igrac.lifes -= 1;
+          if(igrac.lifes===0){
+            gameOver();
+          }
         }
       }
       updateStats();
@@ -113,7 +121,22 @@ function startMoving() {
   }
   requestAnimationFrame(startMoving);
 }
+let spawnInterval:number | NodeJS.Timeout;
+let isGameOver:boolean=false;
 
+function gameOver(){
+  isGameOver=true;
+  clearInterval(spawnInterval);
+  nizaKvadrati.forEach(element=>{
+    const kvadrat=document.getElementById(`kvadrat-${element.id}`);
+    kvadrat?.remove();
+    player?.remove();  
+  })
+  const gameOverScreen = document.createElement("div");
+    gameOverScreen.id = "game-over";
+    gameOverScreen.innerHTML = `<h1>Game Over</h1><p>Score: ${igrac.points}</p>`;
+    gameContainer?.appendChild(gameOverScreen);
+}
 // TO DO: 
 // 1) napravi po smooth transition na dvizenjeto na igrachot so velocityMatter???,
 // 2) otkako dojdde do levata strana, da ima moznost da se spawne
@@ -124,6 +147,7 @@ function startGame() {
   if (kopce != null) {
     kopce.style.display = "none";
   }
-  setInterval(spawnObjects, 1000);
+  isGameOver=false;
+  spawnInterval = setInterval(spawnObjects, 1000);
   requestAnimationFrame(startMoving);
 }
