@@ -20,6 +20,7 @@ const player = document.getElementById("player");
 const gameContainer = document.getElementById("game-container");
 const shirina: number = gameContainer ? gameContainer.clientWidth : 1150;
 const visina: number = gameContainer ? gameContainer.clientHeight : 750;
+
 const igrac: Igrac = {
   points: 0,
   lifes: 3,
@@ -83,6 +84,7 @@ function updateStats() {
     scoreBoard.innerHTML = `${igrac.points}`;
   }
 }
+
 function startMoving() {
   if(isGameOver){
     return;

@@ -20,6 +20,10 @@
 h1 {
     text-align: center;
 }
+#game-over > h1{
+    font-size: 46px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 #game-over{
     position: absolute;
     top: 50%;
@@ -30,6 +34,11 @@ h1 {
     padding: 20px;
     borderRadius: 10px;
     zIndex:100;
+}
+#game-over > p{
+    text-align: center;
+    font-size: 36px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .kvadrat {
     display: inline-block;
