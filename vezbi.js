@@ -61,6 +61,9 @@ function updateStats() {
     }
 }
 function startMoving() {
+    if (isGameOver) {
+        return;
+    }
     var gameContainer = document.getElementById("game-container");
     var visina = gameContainer ? gameContainer.clientHeight : 750;
     if (player) {
@@ -83,12 +86,30 @@ function startMoving() {
                 if (element.positionY <= 10) {
                     kvadratElement.remove();
                     igrac.lifes -= 1;
+                    if (igrac.lifes === 0) {
+                        gameOver();
+                    }
                 }
             }
             updateStats();
         });
     }
     requestAnimationFrame(startMoving);
+}
+var spawnInterval;
+var isGameOver = false;
+function gameOver() {
+    isGameOver = true;
+    clearInterval(spawnInterval);
+    nizaKvadrati.forEach(function (element) {
+        var kvadrat = document.getElementById("kvadrat-".concat(element.id));
+        kvadrat === null || kvadrat === void 0 ? void 0 : kvadrat.remove();
+        player === null || player === void 0 ? void 0 : player.remove();
+    });
+    var gameOverScreen = document.createElement("div");
+    gameOverScreen.id = "game-over";
+    gameOverScreen.innerHTML = "<h1>Game Over</h1><p>Score: ".concat(igrac.points, "</p>");
+    gameContainer === null || gameContainer === void 0 ? void 0 : gameContainer.appendChild(gameOverScreen);
 }
 // TO DO: 
 // 1) napravi po smooth transition na dvizenjeto na igrachot so velocityMatter???,
@@ -100,6 +121,7 @@ function startGame() {
     if (kopce != null) {
         kopce.style.display = "none";
     }
-    setInterval(spawnObjects, 1000);
+    isGameOver = false;
+    spawnInterval = setInterval(spawnObjects, 1000);
     requestAnimationFrame(startMoving);
 }
