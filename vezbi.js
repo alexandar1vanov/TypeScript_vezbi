@@ -2,7 +2,7 @@ var nizaKvadrati = new Array();
 var count = 0;
 var player = document.getElementById("player");
 var gameContainer = document.getElementById("game-container");
-var shirina = gameContainer ? gameContainer.clientWidth : 1150;
+var shirina = gameContainer ? gameContainer.clientWidth - 50 : 1150;
 var visina = gameContainer ? gameContainer.clientHeight : 750;
 var igrac = {
     points: 0,
@@ -15,6 +15,11 @@ function movePlayer() {
         player.style.left = "".concat(igrac.positionX, "%");
     }
 }
+// TO DO: 
+// 1) napravi po smooth transition na dvizenjeto na igrachot so velocityMatter??? 
+// 2) otkako dojdde do levata strana, da ima moznost da se spawne na Desnata strana
+// za polesno da stignuva  ##DONE
+// 3)
 document.addEventListener("keydown", function (event) {
     if (event.key === "ArrowLeft" || event.key === "a") {
         igrac.positionX -= igrac.speed;
@@ -22,11 +27,11 @@ document.addEventListener("keydown", function (event) {
     else if (event.key === "ArrowRight" || event.key === "d") {
         igrac.positionX += igrac.speed;
     }
-    if (igrac.positionX <= 9) {
-        igrac.positionX = 9;
-    }
-    else if (igrac.positionX >= 91) {
+    if (igrac.positionX <= 8) {
         igrac.positionX = 91;
+    }
+    else if (igrac.positionX >= 92) {
+        igrac.positionX = 9;
     }
     movePlayer();
 });
@@ -110,12 +115,33 @@ function gameOver() {
     gameOverScreen.id = "game-over";
     gameOverScreen.innerHTML = "<h1>Game Over</h1><p>Score: ".concat(igrac.points, "</p>");
     gameContainer === null || gameContainer === void 0 ? void 0 : gameContainer.appendChild(gameOverScreen);
+    var gameOverButton = document.createElement("button");
+    gameOverButton.id = "play-again";
+    gameOverButton.innerHTML = "PLAY AGAIN";
+    gameOverButton.onclick = playAgain;
+    gameContainer === null || gameContainer === void 0 ? void 0 : gameContainer.appendChild(gameOverButton);
 }
-// TO DO: 
-// 1) napravi po smooth transition na dvizenjeto na igrachot so velocityMatter???,
-// 2) otkako dojdde do levata strana, da ima moznost da se spawne
-// za polesno da stignuva
-// 3)
+function playAgain() {
+    var _a, _b;
+    isGameOver = false;
+    (_a = document.getElementById("play-again")) === null || _a === void 0 ? void 0 : _a.remove();
+    (_b = document.getElementById("game-over")) === null || _b === void 0 ? void 0 : _b.remove();
+    igrac.lifes = 3;
+    igrac.points = 0;
+    igrac.positionX = 50;
+    updateStats();
+    movePlayer();
+    var existingPlayer = document.getElementById("player");
+    if (!existingPlayer) {
+        var newPlayer = document.createElement("div");
+        newPlayer.id = "player";
+        newPlayer.className = "player";
+        gameContainer === null || gameContainer === void 0 ? void 0 : gameContainer.appendChild(newPlayer);
+        // Reassign the player variable
+        player = newPlayer;
+    }
+    startGame();
+}
 function startGame() {
     var kopce = document.getElementById("PlayGameButton");
     if (kopce != null) {

@@ -26,14 +26,12 @@ h1 {
 }
 #game-over{
     position: absolute;
-    top: 50%;
+    top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
     background: black;
     color: #b91b1b;
     padding: 20px;
-    borderRadius: 10px;
-    zIndex:100;
 }
 #game-over > p{
     text-align: center;
@@ -102,4 +100,27 @@ h4{
     margin: 0;
     display: flex;
     justify-content: center;
+}
+#play-again{
+    color: black;
+    width: 170px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border: 3px solid #b91b1b;
+    background-image: -webkit-linear-gradient(30deg, #b91b1b 50%, transparent 50%);
+    background-image: linear-gradient(30deg, #b91b1b 50%, transparent 50%);
+    background-size: 500px;
+    background-repeat: no-repeat;
+    background-position: 0%;
+    font-size: 26px;
+    -webkit-transition: background 300ms ease-in-out;
+    transition: background 300ms ease-in-out;
+    cursor: pointer;
+    z-index: 100;
+    margin-top: 100px;
+}
+#play-again:hover{
+    background-position: 100%;
+    background-color: black;
+    color: #b91b1b;
 }

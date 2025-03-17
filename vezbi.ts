@@ -16,9 +16,9 @@ interface Igrac {
 const nizaKvadrati: Array<Kvadrat> = new Array();
 var count: number = 0;
 
-const player = document.getElementById("player");
+let player = document.getElementById("player");
 const gameContainer = document.getElementById("game-container");
-const shirina: number = gameContainer ? gameContainer.clientWidth : 1150;
+const shirina: number = gameContainer ? gameContainer.clientWidth - 50 : 1150;
 const visina: number = gameContainer ? gameContainer.clientHeight : 750;
 
 const igrac: Igrac = {
@@ -33,6 +33,11 @@ function movePlayer() {
     player.style.left = `${igrac.positionX}%`
   }
 }
+// TO DO: 
+// 1) napravi po smooth transition na dvizenjeto na igrachot so velocityMatter??? 
+// 2) otkako dojdde do levata strana, da ima moznost da se spawne na Desnata strana
+// za polesno da stignuva  ##DONE
+// 3)
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "ArrowLeft" || event.key === "a") {
@@ -40,10 +45,10 @@ document.addEventListener("keydown", (event) => {
   } else if (event.key === "ArrowRight" || event.key === "d") {
     igrac.positionX += igrac.speed;
   }
-  if (igrac.positionX <= 9) {
-    igrac.positionX = 9;
-  } else if (igrac.positionX >= 91) {
+  if (igrac.positionX <= 8) {
     igrac.positionX = 91;
+  } else if (igrac.positionX >= 92) {
+    igrac.positionX = 9;
   }
   movePlayer();
 });
@@ -86,7 +91,7 @@ function updateStats() {
 }
 
 function startMoving() {
-  if(isGameOver){
+  if (isGameOver) {
     return;
   }
   const gameContainer = document.getElementById("game-container");
@@ -113,7 +118,7 @@ function startMoving() {
         if (element.positionY <= 10) {
           kvadratElement.remove();
           igrac.lifes -= 1;
-          if(igrac.lifes===0){
+          if (igrac.lifes === 0) {
             gameOver();
           }
         }
@@ -123,33 +128,60 @@ function startMoving() {
   }
   requestAnimationFrame(startMoving);
 }
-let spawnInterval:number | NodeJS.Timeout;
-let isGameOver:boolean=false;
+let spawnInterval: number | NodeJS.Timeout;
+let isGameOver: boolean = false;
 
-function gameOver(){
-  isGameOver=true;
+function gameOver() {
+  isGameOver = true;
   clearInterval(spawnInterval);
-  nizaKvadrati.forEach(element=>{
-    const kvadrat=document.getElementById(`kvadrat-${element.id}`);
+  nizaKvadrati.forEach(element => {
+    const kvadrat = document.getElementById(`kvadrat-${element.id}`);
     kvadrat?.remove();
-    player?.remove();  
+    player?.remove();
   })
   const gameOverScreen = document.createElement("div");
-    gameOverScreen.id = "game-over";
-    gameOverScreen.innerHTML = `<h1>Game Over</h1><p>Score: ${igrac.points}</p>`;
-    gameContainer?.appendChild(gameOverScreen);
+  gameOverScreen.id = "game-over";
+  gameOverScreen.innerHTML = `<h1>Game Over</h1><p>Score: ${igrac.points}</p>`;
+  gameContainer?.appendChild(gameOverScreen);
+  const gameOverButton = document.createElement("button");
+  gameOverButton.id="play-again";
+  gameOverButton.innerHTML=`PLAY AGAIN`;
+  gameOverButton.onclick=playAgain;
+  gameContainer?.appendChild(gameOverButton);
 }
-// TO DO: 
-// 1) napravi po smooth transition na dvizenjeto na igrachot so velocityMatter???,
-// 2) otkako dojdde do levata strana, da ima moznost da se spawne
-// za polesno da stignuva
-// 3)
+function playAgain(){
+  isGameOver=false;
+  
+  document.getElementById("play-again")?.remove();
+  document.getElementById("game-over")?.remove();
+  
+  igrac.lifes=3;
+  igrac.points=0;
+  igrac.positionX=50;
+  
+  updateStats();
+  movePlayer()
+  
+  let existingPlayer = document.getElementById("player");
+  if (!existingPlayer) {
+    const newPlayer = document.createElement("div");
+    newPlayer.id = "player";
+    newPlayer.className = "player";
+    gameContainer?.appendChild(newPlayer);
+
+    // Reassign the player variable
+    player = newPlayer;
+  }
+  
+  startGame();
+}
+
 function startGame() {
   const kopce = document.getElementById("PlayGameButton");
   if (kopce != null) {
     kopce.style.display = "none";
   }
-  isGameOver=false;
+  isGameOver = false;
   spawnInterval = setInterval(spawnObjects, 1000);
   requestAnimationFrame(startMoving);
 }
