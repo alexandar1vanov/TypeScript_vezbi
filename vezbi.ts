@@ -34,7 +34,7 @@ function movePlayer() {
   }
 }
 // TO DO: 
-// 1) napravi po smooth transition na dvizenjeto na igrachot so velocityMatter??? 
+// 1) napravi po smooth transition na dvizenjeto na igrachot so velocityMatter???  
 // 2) otkako dojdde do levata strana, da ima moznost da se spawne na Desnata strana
 // za polesno da stignuva  ##DONE
 // 3)
